@@ -5,13 +5,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>some-animate</title>
+  <style>
+    #example{position: relative;}
+  </style>
 </head>
 <body>
-  <canvas id="example"></canvas>
+  <div id="example"></div>
 </body>
 <script>
   let canvasDom = document.querySelector("#example");
-  ani.init(canvasDom, 5);
+  ani.init(canvasDom, 2);
   ani.getTime();
 </script>
 </html>

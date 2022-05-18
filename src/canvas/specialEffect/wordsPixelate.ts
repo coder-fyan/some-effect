@@ -16,7 +16,6 @@ export default function pixelate(imgData: ImageData):n {
   for(let i = 0; i < len; i ++) {
     let alpha = data[i * 4 + 3];
     if (alpha != 0) {
-      console.log(i);
       transArr[i] = 1;
     }
   };
