@@ -58,6 +58,7 @@ let numberImageData: numberImageDataType = {};
 // find the widest of the number from zero to nine
 function findWidest():string {
     let testArr = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":"];
+    // let testArr = [":", "8"];
     let maxWidth = 0, maxItem = "0";
     testArr.forEach((item: string) => {
         let textMeasure = measureText(item)
@@ -192,6 +193,7 @@ export function getTime () {
     animateCanvas.clearRect(0, 0, areaInfo.width, areaInfo.height); //清除整个画布是正确的，动画的位置不一定只出现在
     let regs = /(\d)(\d)(:)(\d)(\d)\3(\d)(\d)/.exec(new Date().toString()) as RegExpExecArray;//通过正则的记忆模式来获取时间的时分秒
     let time = [regs[1], regs[2], regs[3], regs[4], regs[5], regs[3], regs[6], regs[7]];
+    // let time = [regs[3], regs[3], regs[3], regs[3], regs[3], regs[3], regs[3], regs[3]];
     let startPos = border;
     for (let t = 0 ; t < time.length; t++) {
         let imgData:ImageData;

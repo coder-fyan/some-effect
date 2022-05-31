@@ -7,14 +7,22 @@
   <title>some-animate</title>
   <style>
     #example{position: relative;}
+    .demo{height: 100px;margin-top: 20px;background-color: aqua;}
   </style>
 </head>
 <body>
   <div id="example"></div>
+  <div class="demo"><span>45dwdss</span></div>
+  <div class="demo">
+    <img src="./images/1.png" alt="" srcset="">
+  </div>
+  <div class="demo"></div>
 </body>
 <script>
   let canvasDom = document.querySelector("#example");
-  ani.init(canvasDom, 2);
-  ani.getTime();
+  // ani.canvas.init(canvasDom, 2);
+  // ani.canvas.getTime();
+  ani.js.addHoverEvent();
+  ani.svg.initTransDom2Svg();
 </script>
 </html>

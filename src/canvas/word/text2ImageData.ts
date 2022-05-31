@@ -36,7 +36,6 @@ export function measureText (word: string): TextMetrics {
   let ctx:CanvasRenderingContext2D = canvasDOm.getContext("2d") as CanvasRenderingContext2D;
   ctx.font = FONT;
   let text = ctx.measureText(word);
-  console.log(word, text);
   return text;
 }
 
@@ -52,7 +51,8 @@ export function trans (words: string): ImageData {
   canvasDOm.width = text.width;
   canvasDOm.height = getTextHeight(text);
   ctx.font = FONT;
-  ctx.textBaseline = 'hanging';
+  //Note the baseline, the textBaseline is the attribute which line is aimed at the start position.
+  ctx.textBaseline = 'top';
   ctx.fillText(words, 0,0);
   let imgData = ctx.getImageData(0,0,canvasDOm.width,canvasDOm.height);
   return imgData;

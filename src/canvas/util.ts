@@ -7,7 +7,7 @@
 
 
 //create canvas element,sometimes we need not noly an element;
-export function createCanvas<t extends {width: number, height: number}>(wrap: HTMLElement, areaInfo: t, position: string): CanvasRenderingContext2D {
+export function createCanvas<t extends {width: number, height: number}>(wrap: HTMLElement, areaInfo: t, position: string = "static"): CanvasRenderingContext2D {
   let canvasDom = document.createElement("canvas");
   canvasDom.style.position = position;
   canvasDom.style.top = "0";
@@ -19,3 +19,7 @@ export function createCanvas<t extends {width: number, height: number}>(wrap: HT
   return ctx;
 }
 
+//a function to pick the color info from the mouse position
+export function picker() {
+  
+}

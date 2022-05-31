@@ -5,6 +5,17 @@ const baseConf = require("./webpack.config.base");
 
 module.exports = merge(baseConf, {
   mode: "development",
+  output: {
+   assetModuleFilename: 'images/[name].png'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.png/,
+        type: 'asset/resource'
+      }
+    ]
+  },
   plugins: [
     new HtmlWebpackPlugin({ 
       template: "./src/index.html",
