@@ -1,1 +1,1 @@
-export * from "./transDom"
+export * from "./transdom/transDom"
