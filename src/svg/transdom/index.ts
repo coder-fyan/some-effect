@@ -1,18 +1,9 @@
 
-import { fetchSource } from "../../util"
+import { createDisDom } from "../../util/util"
 import { img2canvas } from "../../canvas/image/index";
-import "./transdom.scss"
+import "./index.scss"
 
-function createCloseBtn (wrapDom: HTMLElement): HTMLElement {
-  let closeDom = document.createElement("buttom");
-  closeDom.textContent = "X";
-  closeDom.classList.add("closeBtn");
-  closeDom.addEventListener("click", () =>  {
-    document.body.removeChild(wrapDom);
-  })
-  return closeDom;
-}
-
+//save button
 function createLoadBtn () {
   let loadDom = document.createElement("a");
   loadDom.textContent = "保存";
@@ -21,21 +12,12 @@ function createLoadBtn () {
   return loadDom;
 }
 
-function createDisDom () {
-  let wrapDom = document.createElement("div");
-  let closeBtn = createCloseBtn(wrapDom);
-  wrapDom.classList.add("wraper");
-  wrapDom.append(closeBtn);
-  document.body.append(wrapDom);
-  return wrapDom;
-}
-
+//choice the dom which will be translated.
 function choiceDom (e: Event) {
   let dom = e.target as HTMLElement;
   transDom2svg(dom).then((svg) => {
     let img = document.createElement("img");
-    // let svgString = encodeURIComponent(new XMLSerializer().serializeToString(svg));
-    let svgString = new XMLSerializer().serializeToString(svg);
+    let svgString = encodeURIComponent(new XMLSerializer().serializeToString(svg));
     //this time, the image is a svg source,
     img.src = `data:image/svg+xml;charset=utf-8,${svgString}`;
     img.classList.add("exampleDom");
@@ -60,6 +42,8 @@ export function closeTransDom2Svg() {
   document.removeEventListener("dblclick", choiceDom);
 }
 
+
+//parse image dom
 async function parseImageDom (cloneDom: HTMLElement):Promise<HTMLElement> {
   let promiseArr: Promise<0>[] = [];
   //need switch the dom type image video and etc
@@ -89,6 +73,7 @@ async function parseImageDom (cloneDom: HTMLElement):Promise<HTMLElement> {
   })
 }
 
+//parse dom
 export async function parseDom (dom: HTMLElement):Promise<HTMLElement> {
   let cloneDom = dom.cloneNode(true) as HTMLElement;
   return Promise.all([parseImageDom(cloneDom)]).then(() => {
@@ -96,7 +81,7 @@ export async function parseDom (dom: HTMLElement):Promise<HTMLElement> {
   })
 }
 
-//
+//get the styles from the document
 export function getStylesFromDoc () {
   const allCSS = Array.from(document.styleSheets)
   .map(styleSheet => {

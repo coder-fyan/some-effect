@@ -1,0 +1,40 @@
+.canvas{
+  position: absolute;
+  left: 20%;
+  top: 10%;
+}
+
+.colorPicker{
+  position: absolute;
+  left: 20%;
+  top: 75%;
+}
+
+.widthSetting{
+  position: absolute;
+  width: 40px;
+  right: 20%;
+  top: 75%;
+}
+
+.clean{
+  position: absolute;
+  width: 40px;
+  left: 30%;
+  top: 75%;
+  color: #333;
+  text-align: center;
+  cursor: pointer;
+}
+
+.a{
+  position: absolute;
+  width: 40px;
+  left: 40%;
+  top: 75%;
+  color: #333;
+  text-align: center;
+  cursor: pointer;
+  background-color: white;
+  text-decoration: none;
+}

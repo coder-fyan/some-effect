@@ -1,7 +1,7 @@
 import {trans, measureText, getTextHeight} from "../../word/text2ImageData";
 import {createCanvas} from "../../util";
 
-import pixelate from "../../specialEffect/wordsPixelate";
+import pixelate from "../../specialEffect/imageDataPixelate";
 
 // 形成字符的实心小方格
 interface fillItem {

@@ -4,8 +4,7 @@ console.log(__dirname);
 
 module.exports = {
   entry: {
-    "canvas": "./src/canvas/animate/timer/index.ts",
-    "util": "./src/util.ts",
+    "canvas": "./src/canvas/index.ts",
     "js": "./src/js/getTheDom.ts",
     "svg": "./src/svg/index.ts",
   },
