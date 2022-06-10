@@ -16,8 +16,11 @@
   <div class="demo">
     <img src="./images/1.png" alt="" srcset="">
   </div>
-  <div class="demo">
+  <div class="demo" id="demo">
     <input type="text" value="123"/>
+  </div>
+  <div class="demo">
+    <video class="video" preload="auto" controls src="./video/video.mp4"></video>
   </div>
 </body>
 <script>
@@ -26,6 +29,15 @@
   // ani.canvas.getTime();
   // ani.js.addHoverEvent();
   // ani.svg.initTransDom2Svg();
-  ani.canvas.createBoard();
+  // ani.canvas.createBoard();
+  let dom  = document.querySelector("#demo");
+  ani.canvas.createCoverCanvas(dom);
+
+  let dom1  = document.querySelector(".demo");
+  ani.canvas.createCoverCanvas(dom1);
+
+  let video = document.querySelector(".video");
+  ani.canvas.video2canvas(video);
+  ani.canvas.pickerColors();
 </script>
 </html>

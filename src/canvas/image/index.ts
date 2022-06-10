@@ -1,3 +1,6 @@
+export * from "./pixelate"
+
+
 export function img2canvas (img: HTMLImageElement): HTMLCanvasElement {
   let { width, height } = img;
   let canvasDom = document.createElement("canvas");

@@ -5,14 +5,24 @@ const baseConf = require("./webpack.config.base");
 
 module.exports = merge(baseConf, {
   mode: "development",
-  output: {
-   assetModuleFilename: 'images/[name].png'
-  },
+  // output: {
+  //  assetModuleFilename: 'images/[name].png'
+  // },
   module: {
     rules: [
       {
         test: /\.png/,
-        type: 'asset/resource'
+        type: 'asset/resource',
+        generator: {
+          filename: "images/[name].png"
+        }
+      },
+      {
+        test: /\.mp4/,
+        type: 'asset/resource',
+        generator: {
+          filename: "video/[name].mp4"
+        }
       }
     ]
   },

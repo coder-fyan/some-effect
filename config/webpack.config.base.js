@@ -13,7 +13,7 @@ module.exports = {
     filename: '[name].js',
     path: path.resolve(__dirname, '../dist'),
     clean: true,
-    library: { // 这里有一种旧的语法形式可以使用（点击显示）
+    library: {
       type: "umd", // 通用模块定义
       // the type of the exported library
       name: ["ani", "[name]"], // string | string[]
@@ -44,5 +44,14 @@ module.exports = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
+
+    //if use loader to translate, it can be ignored.
+    alias: {
+      animate: path.resolve(__dirname, '../src/canvas/animate/'),
+      image: path.resolve(__dirname, '../src/canvas/image/'),
+      specialEffect: path.resolve(__dirname, '../src/canvas/specialEffect/'),
+      video: path.resolve(__dirname, '../src/canvas/video/'),
+      word: path.resolve(__dirname, '../src/canvas/word/'),
+    }
   },
 }

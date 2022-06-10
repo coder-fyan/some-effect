@@ -1,5 +1,6 @@
 import "../css/common.scss";
 import "../images/1.png";
+import "../images/video.mp4";
 
 function mouseoverEffect (this: any, event:Event) {
   let dom = event.target as Element;

@@ -1,7 +1,8 @@
-import {trans, measureText, getTextHeight} from "../../word/text2ImageData";
-import {createCanvas} from "../../util";
+import {trans, measureText, getTextHeight} from "word/index";
 
-import pixelate from "../../specialEffect/imageDataPixelate";
+import pixelate from "image/pixelate";
+
+
 
 // 形成字符的实心小方格
 interface fillItem {
@@ -54,6 +55,22 @@ interface numberImageDataType {
 
 //存储需要转换的字符imageData数据
 let numberImageData: numberImageDataType = {};
+
+
+//create canvas element,sometimes we need not noly an element;
+export function createCanvas<t extends {width: number, height: number}>(wrap: HTMLElement, areaInfo: t, position: string = "static"): CanvasRenderingContext2D {
+    let canvasDom = document.createElement("canvas");
+    canvasDom.style.position = position;
+    canvasDom.style.top = "0";
+    canvasDom.style.left = "0";
+    canvasDom.width = areaInfo.width;
+    canvasDom.height = areaInfo.height;
+    wrap.append(canvasDom);
+    let ctx = canvasDom.getContext("2d") as CanvasRenderingContext2D;
+    return ctx;
+  }
+
+
 
 // find the widest of the number from zero to nine
 function findWidest():string {

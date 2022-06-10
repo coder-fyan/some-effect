@@ -1,10 +1,8 @@
-import { createDisDom } from "../../../util/util";
+import { createDisDom } from "util/util";
+
+import { deletePx } from "../../util";
 
 import "./index.scss";
-
-function deletePx(pxStr: string): number {
-  return +pxStr.replace("px", "");
-}
 
 let canvasDom = document.createElement("canvas"); //sketchboard
 let ctx = canvasDom.getContext("2d"); //canvas context
@@ -73,6 +71,7 @@ function initDraw () {
   let point: Array<number> = [];
   canvasDom.addEventListener("mousedown", (e) => {
     flag = true;
+    ctx!.moveTo(e.offsetX, e.offsetY);
     ctx!.strokeStyle = curColor;
     ctx!.lineWidth = curWidth;
     ctx!.beginPath();
