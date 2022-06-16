@@ -1,6 +1,6 @@
 import {trans, measureText, getTextHeight} from "word/index";
 
-import pixelate from "image/pixelate";
+import {wordPixelate} from "word/pixelate";
 
 
 
@@ -219,7 +219,7 @@ export function getTime () {
         if (t != time.length - 1 && t != 0) {
             startPos += wordSpace;
         }
-        let pixeArray = pixelate(imgData);
+        let pixeArray = wordPixelate(imgData);
         let need = needAddAnimate(t, time[t]);
         if (need) {
             timeCanvas.clearRect(startPos, 0, curWordWidth, areaInfo.height);

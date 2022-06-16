@@ -62,26 +62,6 @@ export function video2canvas (video: HTMLVideoElement) {
   return canvas;
 }
 
-export function transHEX2rRGBA(hex: string) {
-  let subNo = hex.replace("#", "");
-  let hexArr = subNo.split("");
-  let red = "";
-  let green = "";
-  let blue = "";
-  if (hexArr.length == 3) {
-    hexArr = [hexArr[0], hexArr[0], hexArr[1], hexArr[1], hexArr[2], hexArr[2]];
-  }
-  red = hexArr[0] + hexArr[1] + "";
-  green = hexArr[2] + hexArr[3] + "";
-  blue = hexArr[4] + hexArr[5] + "";
-  return {
-    red: parseInt(red, 16),
-    green: parseInt(green, 16),
-    blue: parseInt(blue, 16),
-    color:`rgba(${parseInt(red, 16)}, ${parseInt(green, 16)}, ${parseInt(blue, 16)}, 1)`
-  }
-}
-
 export function pickerColors () {
   canvas.addEventListener("click", (e) => {
     console.log(e.offsetX,e.offsetY);
@@ -98,7 +78,7 @@ export function pickerColors () {
         red,
         green,
         blue,
-        color:`rgba(${parseInt(red + "", 16)}, ${parseInt(green + "", 16)}, ${parseInt(blue + "", 16)}, 1)`
+        color:`rgba(${red}, ${green}, ${blue}, 1)`
       })
     }
     // substract("");

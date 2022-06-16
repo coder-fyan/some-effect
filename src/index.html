@@ -7,21 +7,21 @@
   <title>some-animate</title>
   <style>
     #example{position: relative;}
-    .demo{height: 100px;margin-top: 20px;background-color: aqua;}
+    .demo{height: 100px;margin-top: 20px;background-color: rgb(11, 11, 11);}
   </style>
 </head>
 <body>
   <div id="example"></div>
   <div class="demo"><span>45dwdss</span></div>
   <div class="demo">
-    <img src="./images/1.png" alt="" srcset="">
+    <img src="./images/1.png" class="img" alt="" srcset="">
   </div>
   <div class="demo" id="demo">
     <input type="text" value="123"/>
   </div>
-  <div class="demo">
+  <!-- <div class="demo">
     <video class="video" preload="auto" controls src="./video/video.mp4"></video>
-  </div>
+  </div> -->
 </body>
 <script>
   // let canvasDom = document.querySelector("#example");
@@ -30,14 +30,34 @@
   // ani.js.addHoverEvent();
   // ani.svg.initTransDom2Svg();
   // ani.canvas.createBoard();
-  let dom  = document.querySelector("#demo");
-  ani.canvas.createCoverCanvas(dom);
+  // let dom  = document.querySelector("#demo");
+  // ani.canvas.createCoverCanvas(dom);
 
-  let dom1  = document.querySelector(".demo");
-  ani.canvas.createCoverCanvas(dom1);
+  // let dom1  = document.querySelector(".demo");
+  // ani.canvas.createCoverCanvas(dom1);
 
-  let video = document.querySelector(".video");
-  ani.canvas.video2canvas(video);
-  ani.canvas.pickerColors();
+  // let video = document.querySelector(".video");
+  // ani.canvas.video2canvas(video);
+  // ani.canvas.pickerColors();
+
+  let img = document.querySelector(".img");
+  let wrapDom = img.parentElement;
+  console.log(wrapDom);
+  // img.onload = function () {
+  //   let imgCanvasdom = ani.canvas.img2canvas(img);
+  //   let {canvasDom, ctx} = imgCanvasdom;
+  //   let imgData = ctx.getImageData(0, 0, canvasDom.width, canvasDom.height);
+  //   let pixImgData = ani.canvas.imgPixelate(imgData, 4, 1, "#ffffff");
+  //   ctx.putImageData(pixImgData, 0, 0);
+  //   wrapDom.appendChild(canvasDom);
+  // }
+
+  let imgCanvasdom = ani.canvas.img2canvas(img);
+    let {canvasDom, ctx} = imgCanvasdom;
+    let imgData = ctx.getImageData(0, 0, canvasDom.width, canvasDom.height);
+    let pixImgData = ani.canvas.imgPixelate(imgData, 8, 1, "#f00");
+    ctx.putImageData(pixImgData, 0, 0);
+    wrapDom.appendChild(canvasDom);
+
 </script>
 </html>

@@ -52,6 +52,7 @@ module.exports = {
       specialEffect: path.resolve(__dirname, '../src/canvas/specialEffect/'),
       video: path.resolve(__dirname, '../src/canvas/video/'),
       word: path.resolve(__dirname, '../src/canvas/word/'),
+      util: path.resolve(__dirname, '../src/util/'),
     }
   },
 }

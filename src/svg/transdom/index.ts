@@ -1,5 +1,5 @@
 
-import { createDisDom } from "../../util/util"
+import { createDisDom } from "../../util/domWidget"
 import { img2canvas } from "../../canvas/image/index";
 import "./index.scss"
 
@@ -25,7 +25,7 @@ function choiceDom (e: Event) {
     let loadBtn = createLoadBtn();
     //need after the img loaded then to canvas the img.
     img.onload = function () {
-      let canvas = img2canvas(img);
+      let {canvasDom: canvas} = img2canvas(img);
       loadBtn.href = canvas.toDataURL();
       wrapDom.append(img);
       wrapDom.append(loadBtn);
@@ -58,7 +58,7 @@ async function parseImageDom (cloneDom: HTMLElement):Promise<HTMLElement> {
     let cloneImg = item.cloneNode(true) as HTMLImageElement;
     let pro: Promise<0> = new Promise((resolve, rejection) => {
       cloneImg.onload = function () {
-        let canvas = img2canvas(item);
+        let {canvasDom: canvas} = img2canvas(item);
         item.src = canvas.toDataURL();
         //promise resolve needs an arguments
         resolve(0);

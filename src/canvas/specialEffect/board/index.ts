@@ -1,4 +1,4 @@
-import { createDisDom } from "util/util";
+import { createDisDom } from "util/domWidget";
 
 import { deletePx } from "../../util";
 

@@ -3,24 +3,45 @@
  * use this to pixelate pictures or text
  * 
  */
+///<reference path="../../../util/transColor.d.ts" />
 
-type n = [[0 | 1]] ; 
 
-export default function pixelate(imgData: ImageData):n {
+import { transHEX2RGBA } from "util/transColor";
+
+export function imgPixelate(imgData: ImageData, pixWidth: number, borderWidth: number, borderColor: string): ImageData {
   let {data, width, height} = imgData;
-  let len = data.length / 4;
-  let row = len / width;
-  let transArr = new Array(len).fill(0);
-  let lastArr = [];
-  
-  for(let i = 0; i < len; i ++) {
-    let alpha = data[i * 4 + 3];
-    if (alpha != 0) {
-      transArr[i] = 1;
+  let colorObj:colorObj = {
+    red: 255,
+    green: 255,
+    blue: 255,
+    color:`rgba(255, 255, 255, 1)`
+  };
+  if (borderColor) {
+    colorObj: colorObj = transHEX2RGBA(borderColor);
+  }
+  console.log(colorObj);
+  for (let h = 0; h < height; h++) {
+    for (let w = 0; w <= width; w ++) {
+      if (h % pixWidth == 0) {
+        for (let b = 0; b < borderWidth; b++) {
+          let hpos = (h * (b + 1) * width + w) * 4;
+          data[hpos] = colorObj.red;
+          data[hpos + 1] = colorObj.green;
+          data[hpos + 2] = colorObj.blue;
+          data[hpos + 3] = 255;
+        }
+      }
+      if (w % pixWidth == 0) {
+        for (let b = 0; b < borderWidth; b++) {
+          let hpos = (h * width + w * (b + 1)) * 4;
+          data[hpos] = colorObj.red;
+          data[hpos + 1] = colorObj.green;
+          data[hpos + 2] = colorObj.blue;
+          data[hpos + 3] = 255;
+        }
+      }
     }
-  };
-  for (let j = 0; j < row; j ++) {
-    lastArr.push(transArr.slice(j * width, (j + 1) * width));
-  };
-  return lastArr as n;
+  }
+  
+  return imgData;
 }
