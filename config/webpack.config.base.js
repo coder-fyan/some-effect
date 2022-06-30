@@ -16,10 +16,8 @@ module.exports = {
     library: {
       type: "umd", // 通用模块定义
       // the type of the exported library
-      name: ["ani", "[name]"], // string | string[]
+      name: ["ani", "[name]"], // string | string[] we can use it by ani[name][parameter]
       // the name of the exported library
-
-      /* Advanced output.library configuration (click to show) */
     }
   },
   module: {
@@ -31,6 +29,7 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/,
+        exclude: /node_modules/,
         use: [
           // Creates `style` nodes from JS strings
           "style-loader",
@@ -45,7 +44,7 @@ module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
 
-    //if use loader to translate, it can be ignored.
+    //If we use typescript, we need to set the path parameter in tsconfig.json yet. there be used at compile, tsconfig.json be used at edit.
     alias: {
       animate: path.resolve(__dirname, '../src/canvas/animate/'),
       image: path.resolve(__dirname, '../src/canvas/image/'),
