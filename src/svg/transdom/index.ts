@@ -1,6 +1,6 @@
 
-import { createDisDom } from "../../util/domWidget"
-import { img2canvas } from "../../canvas/image/index";
+import { createDisDom } from "$util/domWidget"
+import { img2canvas } from "$canvasImage/index";
 import "./index.scss"
 
 //save button
@@ -101,7 +101,7 @@ export function getStylesFromDoc () {
 
 function initSvgForeignObject(xmlNs: string) {
   let foreignObject = document.createElementNS(xmlNs, "foreignObject");
-  //foreignObject needs to be set the under four settings.
+  //foreignObject needs to set the under four settings.
   foreignObject.setAttribute("x", "0");
   foreignObject.setAttribute("y", "0");
   foreignObject.setAttribute("width", "100%");

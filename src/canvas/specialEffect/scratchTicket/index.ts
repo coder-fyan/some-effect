@@ -1,7 +1,7 @@
 import "./index.scss";
 
-import { deletePx } from "../../util";
-import { eraser } from "specialEffect/eraser";
+import { deletePx } from "$canvas/util";
+import { eraser } from "$canvasSpecialEffect/eraser";
 
 export function createCoverCanvas (wrapDom: HTMLElement) {
   wrapDom.classList.add("wrapDom");

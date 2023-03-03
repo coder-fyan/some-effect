@@ -27,14 +27,16 @@
     "module": "commonjs",                                /* Specify what module code is generated. */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
     // "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
-    "baseUrl": "src",                                  /* Specify the base directory to resolve non-relative module names. */
+    "baseUrl": "./src",                                  /* Specify the base directory to resolve non-relative module names. */
     "paths": {
-      "animate/*": ["canvas/animate/*"],
-      "image/*": ["canvas/image/*"],
-      "specialEffect/*": ["canvas/specialEffect/*"],
-      "video/*": ["canvas/video/*"],
-      "word/*": ["canvas/word/*"],
-      "util/*": ["util/*"]
+      "$canvas/*": ["canvas/*"],
+      "$canvasAnimate/*": ["canvas/animate/*"],
+      "$canvasImage/*": ["canvas/image/*"],
+      "$canvasSpecialEffect/*": ["canvas/specialEffect/*"],
+      "$canvasVideo/*": ["canvas/video/*"],
+      "$canvasWord/*": ["canvas/word/*"],
+      "$canvasUtil/*": ["canvas/util.*"],
+      "$util/*": ["util/*"]
     },                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like `./node_modules/@types`. */

@@ -3,10 +3,10 @@
  * use this to pixelate pictures or text
  * 
  */
-///<reference path="../../../util/transColor.d.ts" />
+///<reference path="../../../types/transColor.d.ts" />
 
 
-import { transHEX2RGBA } from "util/transColor";
+import { transHEX2RGBA } from "$util/transColor";
 
 export function imgPixelate(imgData: ImageData, pixWidth: number, borderWidth: number, borderColor: string): ImageData {
   let {data, width, height} = imgData;

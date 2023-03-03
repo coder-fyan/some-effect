@@ -1,3 +1,10 @@
-export * from "./text2ImageData"
+export {
+  transLetterToImageData, 
+  getTextHeight,
+  setFont,
+  measureText,
+} from "./text2ImageData";
 
-export * from "./pixelate"
+export { 
+  wordPixelate
+} from "./pixelate";

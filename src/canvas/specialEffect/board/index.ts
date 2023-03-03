@@ -1,6 +1,6 @@
-import { createDisDom } from "util/domWidget";
+import { createDisDom } from "$util/domWidget";
 
-import { deletePx } from "../../util";
+import { deletePx } from "$canvas/util";
 
 import "./index.scss";
 

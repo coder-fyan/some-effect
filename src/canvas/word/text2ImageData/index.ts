@@ -1,12 +1,7 @@
 /**
- * 
  * translate words to pixelate
- * 
  */
-
 let FONT:string = "48px serif";
-
-
 
 //get the string height
 /**
@@ -23,13 +18,10 @@ let FONT:string = "48px serif";
 export function getTextHeight(text: TextMetrics): number {
   return text.fontBoundingBoxAscent + text.fontBoundingBoxDescent;
 }
-
-
 //set the font
 export function setFont (font: string) {
   FONT = font;
 }
-
 //measure the word height and width
 export function measureText (word: string): TextMetrics {
   let canvasDOm:HTMLCanvasElement = document.createElement("canvas");
@@ -38,10 +30,8 @@ export function measureText (word: string): TextMetrics {
   let text = ctx.measureText(word);
   return text;
 }
-
-
 //trans the word from string to imageData
-export function trans (words: string): ImageData {
+export function transLetterToImageData (words: string): ImageData {
   if (!words) {
     throw new Error("there need a words argument at the first place")
   }
@@ -53,7 +43,7 @@ export function trans (words: string): ImageData {
   ctx.font = FONT;
   //Note the baseline, the textBaseline is the attribute which line is aimed at the start position.
   ctx.textBaseline = 'top';
-  ctx.fillText(words, 0,0);
-  let imgData = ctx.getImageData(0,0,canvasDOm.width,canvasDOm.height);
+  ctx.fillText(words, 0, 0);
+  let imgData = ctx.getImageData(0, 0, canvasDOm.width, canvasDOm.height);
   return imgData;
 }

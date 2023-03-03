@@ -4,10 +4,8 @@
  * 
  */
 
-type n = [[0 | 1]] ; 
-
-export function wordPixelate(imgData: ImageData):n {
-  let {data, width, height} = imgData;
+export function wordPixelate(imgData: ImageData):pixeArray {
+  let {data, width} = imgData;
   let len = data.length / 4;
   let row = len / width;
   let transArr = new Array(len).fill(0);
@@ -22,5 +20,5 @@ export function wordPixelate(imgData: ImageData):n {
   for (let j = 0; j < row; j ++) {
     lastArr.push(transArr.slice(j * width, (j + 1) * width));
   };
-  return lastArr as n;
+  return lastArr as pixeArray;
 }

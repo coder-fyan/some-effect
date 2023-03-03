@@ -1,12 +1,15 @@
 const path = require("path");
 
-console.log(__dirname);
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
+  context: path.resolve(__dirname, '../src/'),//just effect the url which in entry, loader and plugin
+  //​We need to set the point at the start position as the relative url mark.​ If not, it will to find the file at node_modules
   entry: {
-    "canvas": "./src/canvas/index.ts",
-    "js": "./src/js/getTheDom.ts",
-    "svg": "./src/svg/index.ts",
+    "canvas": "./canvas/index.ts",
+    "js": "./js/getTheDom.ts",
+    "svg": "./svg/index.ts",
   },
   // target: ["web"],
   output: {
@@ -19,6 +22,29 @@ module.exports = {
       name: ["ani", "[name]"], // string | string[] we can use it by ani[name][parameter]
       // the name of the exported library
     }
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      minSize: 20000,
+      minRemainingSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    },
   },
   module: {
     rules: [
@@ -38,20 +64,47 @@ module.exports = {
           // Compiles Sass to CSS
           "sass-loader"
         ]
+      },      {
+        test: /\.png/,
+        type: 'asset/resource',
+        generator: {
+          filename: "images/[name].png"
+        }
+      },
+      {
+        test: /\.mp4/,
+        type: 'asset/resource',
+        generator: {
+          filename: "video/[name].mp4"
+        }
       }
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    roots: [path.resolve(__dirname, '../src')],
+    extensions: [".tsx", ".ts", ".js", "..."], //'...' to access the default extensions
 
     //If we use typescript, we need to set the path parameter in tsconfig.json yet. there be used at compile, tsconfig.json be used at edit.
+    //if we need to use the roots, let the slash at the start position.
     alias: {
-      animate: path.resolve(__dirname, '../src/canvas/animate/'),
-      image: path.resolve(__dirname, '../src/canvas/image/'),
-      specialEffect: path.resolve(__dirname, '../src/canvas/specialEffect/'),
-      video: path.resolve(__dirname, '../src/canvas/video/'),
-      word: path.resolve(__dirname, '../src/canvas/word/'),
-      util: path.resolve(__dirname, '../src/util/'),
+      $canvas: '/canvas/',
+      $canvasAnimate: '/canvas/animate/',
+      $canvasImage: '/canvas/image/',
+      $canvasSpecialEffect: '/canvas/specialEffect/',
+      $canvasVideo: '/canvas/video/',
+      $canvasWord: '/canvas/word/',
+      $css: '/css/',
+      $images: '/images/',
+      $js: '/js/',
+      $svg: '/svg/',
+      $util: '/util/',
     }
   },
+  plugins: [
+    new HtmlWebpackPlugin({ 
+      template: "./index.html",
+      scriptLoading: "blocking" 
+    }),
+    new BundleAnalyzerPlugin()
+  ]
 }

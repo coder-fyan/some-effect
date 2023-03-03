@@ -24,9 +24,10 @@
   </div> -->
 </body>
 <script>
-  // let canvasDom = document.querySelector("#example");
-  // ani.canvas.init(canvasDom, 2);
-  // ani.canvas.getTime();
+  let canvasDom = document.querySelector("#example");
+  ani.canvas.initGame({wrapDom: canvasDom, width: 200, height: 200});
+  // ani.canvas.initCanvas(canvasDom, 5);
+  // ani.canvas.draw();
   // ani.js.addHoverEvent();
   // ani.svg.initTransDom2Svg();
   // ani.canvas.createBoard();
@@ -40,9 +41,9 @@
   // ani.canvas.video2canvas(video);
   // ani.canvas.pickerColors();
 
-  let img = document.querySelector(".img");
-  let wrapDom = img.parentElement;
-  console.log(wrapDom);
+  // let img = document.querySelector(".img");
+  // let wrapDom = img.parentElement;
+  // console.log(wrapDom);
   // img.onload = function () {
   //   let imgCanvasdom = ani.canvas.img2canvas(img);
   //   let {canvasDom, ctx} = imgCanvasdom;
@@ -52,12 +53,12 @@
   //   wrapDom.appendChild(canvasDom);
   // }
 
-  let imgCanvasdom = ani.canvas.img2canvas(img);
-    let {canvasDom, ctx} = imgCanvasdom;
-    let imgData = ctx.getImageData(0, 0, canvasDom.width, canvasDom.height);
-    let pixImgData = ani.canvas.imgPixelate(imgData, 8, 1, "#f00");
-    ctx.putImageData(pixImgData, 0, 0);
-    wrapDom.appendChild(canvasDom);
+  // let imgCanvasdom = ani.canvas.img2canvas(img);
+  // let {canvasDom, ctx} = imgCanvasdom;
+  // let imgData = ctx.getImageData(0, 0, canvasDom.width, canvasDom.height);
+  // let pixImgData = ani.canvas.imgPixelate(imgData, 8, 1, "#f00");
+  // ctx.putImageData(pixImgData, 0, 0);
+  // wrapDom.appendChild(canvasDom);
 
 </script>
 </html>

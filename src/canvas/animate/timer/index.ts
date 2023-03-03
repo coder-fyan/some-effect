@@ -1,13 +1,13 @@
-import {trans, measureText, getTextHeight} from "word/index";
-
-import {wordPixelate} from "word/pixelate";
-
-
+import {transLetterToImageData, measureText, getTextHeight} from "$canvasWord/index";
+import {wordPixelate} from "$canvasWord/pixelate/";
+import {createCanvas, randomColor} from "$canvas/util"; 
 
 // 形成字符的实心小方格
 interface fillItem {
     posX: number, //小方格的X位置
     posY: number, //小方格的Y位置
+    height: number, //小方格高
+    width: number, //小方格宽
     stepX: number, //小方格的X方向的步幅
     stepY: number, //小方格的Y方向的步幅
     disY: number, //小方格Y方向的步幅增量
@@ -19,182 +19,134 @@ interface canvasText {
     [index: number]: string
 }
 
-
 let itemWidth: number = 5; //构成字体单元格大小
 let element: HTMLElement; //动画容器元素
-let ctx: CanvasRenderingContext2D; //画笔
 let midText: canvasText = []; //当前时分秒位置的字符
-let fillArray: fillItem[] = []; //实心小方格数组
-let border: number = 0; //画布四边的空白宽度，先默认为四边的空白宽度一致
-let wordSpace:number = 0; //字符间距
-
-
-//画布初始化,version one
-// export function init (ele: HTMLCanvasElement, width?: number, bdr?: number) {
-//     element = ele;
-//     ctx = element.getContext("2d")
-//     element.width = 7 * itemWidth * 8 + 70 + 100;
-//     element.height = 10 * itemWidth + 100;
-//     if (width && typeof width === "number"){
-//         itemWidth = width;
-//         element.width = 7 * width * 8 + 70;
-//         element.height = 10 * width;
-//     }
-//     if (bdr && typeof bdr === "number"){
-//         border = bdr;
-//         element.width += 2 * border;
-//         element.height += 2 * border;
-//     }
-
-// }
-
+let animateArray: fillItem[] = []; //实心小方格数组
+let BORDER: number = 0; //画布四边的空白宽度，先默认为四边的空白宽度一致
+let WORDSPACE:number = 0; //字符间距
 
 interface numberImageDataType {
     [index: string | number]: ImageData
 }
 
-//存储需要转换的字符imageData数据
-let numberImageData: numberImageDataType = {};
+interface pixeObj {
+    [index: string | number]: pixeArray
+}
 
-
-//create canvas element,sometimes we need not noly an element;
-export function createCanvas<t extends {width: number, height: number}>(wrap: HTMLElement, areaInfo: t, position: string = "static"): CanvasRenderingContext2D {
-    let canvasDom = document.createElement("canvas");
-    canvasDom.style.position = position;
-    canvasDom.style.top = "0";
-    canvasDom.style.left = "0";
-    canvasDom.width = areaInfo.width;
-    canvasDom.height = areaInfo.height;
-    wrap.append(canvasDom);
-    let ctx = canvasDom.getContext("2d") as CanvasRenderingContext2D;
-    return ctx;
-  }
-
-
-
+let imageDataObj: numberImageDataType = {}, maxItem: string = "0", pixeArray: pixeObj = {};
 // find the widest of the number from zero to nine
-function findWidest():string {
-    let testArr = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":"];
-    // let testArr = [":", "8"];
-    let maxWidth = 0, maxItem = "0";
+function handleStr(str: string) {
+    let testArr = str.split("");
+    let maxWidth = 0;
+    maxItem = testArr[0];
     testArr.forEach((item: string) => {
-        let textMeasure = measureText(item)
+        let textMeasure = measureText(item);
         if (textMeasure.width > maxWidth) {
             maxWidth = textMeasure.width;
             maxItem = item;
         }
-        numberImageData[item] = trans(item);
+        imageDataObj[item] = transLetterToImageData(item);
+        pixeArray[item] = wordPixelate(imageDataObj[item]);
     })
-    return maxItem;
 }
-
-//get the width and height of which we can draw something in it;
-function getTheStringInfo (): TextMetrics {
-    let theMaxItem = findWidest();
-    let theMaxString = "" + theMaxItem + theMaxItem + ":" + theMaxItem + theMaxItem + ":" + theMaxItem + theMaxItem + "";
-    return measureText(theMaxString);
-}
-
-
-//at this animate, we need three canvas, one as the background,one to show the date and the last one to show the animate.
-let backgroundCanvas:CanvasRenderingContext2D, timeCanvas:CanvasRenderingContext2D, animateCanvas:CanvasRenderingContext2D;
 
 interface areaInfoType {
     height: number,
     width: number
 }
 //the area infomation include it's width and height;
-function getAreaInfo ():areaInfoType {
-    let stringInfo:TextMetrics = getTheStringInfo();
-    let width = stringInfo.width * itemWidth + 7 * wordSpace + border * 2;
-    let height = getTextHeight(stringInfo) * itemWidth + border * 2;
-    return {width, height}
+function getAreaInfo (): areaInfoType {
+    let theMaxString = "" + maxItem + maxItem + ":" + maxItem + maxItem + ":" + maxItem + maxItem + "";
+    let stringInfo:TextMetrics = measureText(theMaxString);
+    let width = stringInfo.width * itemWidth + WORDSPACE + BORDER * 2;
+    let height = getTextHeight(stringInfo) * itemWidth + BORDER * 2;
+    return { width, height }
 }
 
-//定义画布信息
+//the map info
 let areaInfo:areaInfoType;
-// init canvas the version twos
-export function init (ele: HTMLElement, IWidth: number) {
+//at this animate, we need three canvas, one as the background,one to show the date and the last one to show the animate.
+let backgroundCanvas:CanvasRenderingContext2D, timeCanvas:CanvasRenderingContext2D, animateCanvas:CanvasRenderingContext2D;
+/**
+ * init the canvas
+ * @param ele the wrapDom,do not set it width and height
+ * @param IWidth the item width which form the letter
+ */
+export function initCanvas (ele: HTMLElement, IWidth: number) {
     element = ele;
     itemWidth = IWidth;
+    const theStringWillBeShow = "0123456789:";//The string is not the final string, it just includes the letters which will be inclueded in the words.
     //notice the order of the canvasElement
+    handleStr(theStringWillBeShow);
     areaInfo = getAreaInfo();
-    // areaInfo = {height:600,width: 1000};
-    backgroundCanvas = createCanvas(element, areaInfo, "static");
+    backgroundCanvas = createCanvas(element, areaInfo, "static");//to expand the space
     timeCanvas = createCanvas(element, areaInfo, "absolute");
     animateCanvas = createCanvas(element, areaInfo, "absolute");
 }
 
-//随机颜色
-function randomColor(): string {
-    let r = Math.floor(255 * Math.random());
-    let g = Math.floor(255 * Math.random());
-    let b = Math.floor(255 * Math.random());
-    return "rgb(" + r + "," + g + "," + b + ")";
+interface drawMethod {
+    (ctx: CanvasRenderingContext2D, item: fillItem): void;
 }
 
 //绘制空心矩形(x，y:起始位置，color: 颜色)
-function drawRect (ctx: CanvasRenderingContext2D, x: number, y: number, color?: string) {
-    ctx.strokeStyle = color ? color : "black";
-    ctx.strokeRect(x, y, itemWidth, itemWidth);
+function drawRect (ctx: CanvasRenderingContext2D, item: fillItem) {
+    ctx.strokeStyle = item.color ? item.color : "black";
+    ctx.strokeRect(item.posX, item.posY, itemWidth, itemWidth);
 }
 
 //绘制实心矩形(x，y:起始位置，color: 颜色)
-function fillRect (ctx: CanvasRenderingContext2D, x: number, y:number, color?: string) {
-    ctx.fillStyle = color ? color : randomColor();
-    ctx.fillRect(x, y, itemWidth, itemWidth);
+function fillRect (ctx: CanvasRenderingContext2D, item: fillItem) {
+    ctx.fillStyle = item.color ? item.color : "black";
+    ctx.fillRect(item.posX, item.posY, itemWidth, itemWidth);
 }
 
-let steps: number[] = [1, 2, 3];
-//实心矩形动画
-function rectAnimate () {
-    for(let i = fillArray.length - 1; i > -1; i--) {
-        if (fillArray[i].posX >= areaInfo.width || fillArray[i].posY >= areaInfo.height) {
+//the value of the item animation distance
+let steps: number[] = [2, 4, 6];
+//animation
+function animate (drawMethod: drawMethod) {
+    for(let i = animateArray.length - 1; i > -1; i--) {
+        if (animateArray[i].posX >= areaInfo.width || animateArray[i].posY >= areaInfo.height) {
 
-            //弹跳效果
-            // fillArray[i].stepY = fillArray[i].stepY - 3;
-            // if (fillArray[i].stepY <= 0) {
-            //     fillArray.splice(i, 1);
-            //     continue;
-            // }
-            // fillArray[i].stepY = -fillArray[i].stepY;
+           // 弹跳效果
+           animateArray[i].stepY = animateArray[i].stepY - 3;
+            if (animateArray[i].stepY <= 0) {
+                animateArray.splice(i, 1);
+                continue;
+            }
+            animateArray[i].stepY = -animateArray[i].stepY;
 
             //没有弹跳效果
-            fillArray.splice(i, 1);
-            continue;
+            // animateArray.splice(i, 1);
+            // continue;
         }
-        fillRect(animateCanvas, fillArray[i].posX, fillArray[i].posY, fillArray[i].color);
-        fillArray[i].stepY += fillArray[i].disY;
-        fillArray[i].posX += fillArray[i].stepX;
-        fillArray[i].posY += fillArray[i].stepY;
+        drawMethod(animateCanvas, animateArray[i]);
+        animateArray[i].stepY += animateArray[i].disY;
+        animateArray[i].posX += animateArray[i].stepX;
+        animateArray[i].posY += animateArray[i].stepY;
     }
     // requestAnimationFrame(rectAnimate);
 }
 
 //画字
-function drawTime (textArray: Array<Array<number>>, startPos: number, needAnimate: boolean) {
-    // if (element.getContext) {
-        
-        for(let i = textArray.length -1; i > -1; i--) {
-            for (let j = textArray[i].length -1; j > -1; j--) {
-                if (textArray[i][j] == 1) {
-                    // drawRect(itemWidth * j, itemWidth * i);
-                    if (needAnimate) {
-                        fillArray.push({posX: itemWidth * j + startPos, posY: itemWidth * i + border, stepX: Math.floor(Math.random() * 4 -2), stepY: -2*steps[Math.floor(Math.random()*steps.length)], disY: 1, color:randomColor()})
-                    }
-                    fillRect(timeCanvas, itemWidth * j + startPos + border, itemWidth * i + border);
-                }
+function drawTime (textArray: pixeArray, startPos: {x: number, y: number}, drawMethod: drawMethod) {        
+    for(let i = textArray.length -1; i > -1; i--) {
+        for (let j = textArray[i].length -1; j > -1; j--) {
+            if (textArray[i][j] == 1) {
+                const curFillItem = {posX: itemWidth * j + startPos.x, posY: itemWidth * i + BORDER, height: itemWidth, width: itemWidth, stepX: Math.floor(Math.random() * 6 - 3), stepY: -steps[Math.floor(Math.random()*steps.length)], disY: 1, color:randomColor()};
+                animateArray.push(curFillItem)
+                // fillRect(timeCanvas, curFillItem);
+                drawMethod(timeCanvas, curFillItem);
             }
         }
-        
-    // }
+    }
 }
 
-//当字符变化，添加动画特效
+//when the word changes, add animation to the word.
 /**
  * 
- * @param index 该字符位置
- * @param text 该字符内容
+ * @param index the letter pos
+ * @param text the letter content
  * @returns 
  */
 function needAddAnimate (index: number, text: string):boolean {
@@ -206,28 +158,26 @@ function needAddAnimate (index: number, text: string):boolean {
 }
 
 //获取当前时间
-export function getTime () {
-    animateCanvas.clearRect(0, 0, areaInfo.width, areaInfo.height); //清除整个画布是正确的，动画的位置不一定只出现在
+export function draw () {
+    animateCanvas.clearRect(0, 0, areaInfo.width, areaInfo.height); //清除整个画布是正确的，动画的位置不一定只出现在当前字符位置
     let regs = /(\d)(\d)(:)(\d)(\d)\3(\d)(\d)/.exec(new Date().toString()) as RegExpExecArray;//通过正则的记忆模式来获取时间的时分秒
     let time = [regs[1], regs[2], regs[3], regs[4], regs[5], regs[3], regs[6], regs[7]];
-    // let time = [regs[3], regs[3], regs[3], regs[3], regs[3], regs[3], regs[3], regs[3]];
-    let startPos = border;
+    let startPos = {x: BORDER, y: BORDER};
     for (let t = 0 ; t < time.length; t++) {
-        let imgData:ImageData;
-        imgData = numberImageData[time[t]];
+        let imgData:ImageData = imageDataObj[time[t]];
         let curWordWidth = imgData.width * itemWidth;
         if (t != time.length - 1 && t != 0) {
-            startPos += wordSpace;
+            startPos.x += WORDSPACE;
         }
-        let pixeArray = wordPixelate(imgData);
+        let pixeText = pixeArray[time[t]];
         let need = needAddAnimate(t, time[t]);
         if (need) {
-            timeCanvas.clearRect(startPos, 0, curWordWidth, areaInfo.height);
-            drawTime(pixeArray, startPos, need);
+            timeCanvas.clearRect(startPos.x, startPos.y, curWordWidth, areaInfo.height);
+            drawTime(pixeText, startPos, fillRect);
         }
-        startPos += curWordWidth;
+        startPos.x += curWordWidth;
     };
-    rectAnimate();
-    requestAnimationFrame(getTime);
+    animate(fillRect);
+    requestAnimationFrame(draw);
     // setTimeout(getTime,50)
 }
