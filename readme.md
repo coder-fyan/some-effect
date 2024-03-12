@@ -1,1 +1,1 @@
-there are some animate,producted by svg or carvas.
+there are some effect,producted by svg or carvas.
